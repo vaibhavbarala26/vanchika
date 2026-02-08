@@ -1,85 +1,61 @@
-import { useState , useRef, use } from 'react'
-import reactLogo from './assets/react.svg'
-import { useNavigate } from 'react-router'
-import viteLogo from '/vite.svg'
-import img from "./h4.gif"
-import sanjihappy from "./h7.gif"
-import sanjisad from "./h8.gif"
-import './App.css'
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
+import img from "./h4.gif";
+import sanjihappy from "./h7.gif";
+import sanjisad from "./h8.gif";
+import "./App.css";
+
 function App() {
-  const [issad , setisSad] = useState(false);
-const hearts = Array.from({ length: 20 });
-const noBtnRef = useRef(null);
-const navigate = useNavigate()
-const [accepted , setaccepted] = useState(false)
-const dodge = () => {
-  const btn = noBtnRef.current;
-  if (!btn) return;
-  setisSad(true);
-  const x = Math.random() * 160;
-  const y = Math.random() * 100;
+  const [issad, setisSad] = useState(false);
+  const hearts = Array.from({ length: 20 });
+  const noBtnRef = useRef(null);
+  const navigate = useNavigate();
 
-  btn.style.pointerEvents = "none";
-  btn.style.transform = `translate(${x}px, ${y}px)`;
+  const isMobile = window.innerWidth < 640;
 
-  setTimeout(() => {
-    btn.style.pointerEvents = "auto";
-    setisSad(false)
-  }, 600);
-};
+  // 🏃 NO button dodge
+  const dodge = () => {
+    const btn = noBtnRef.current;
+    if (!btn) return;
+
+    setisSad(true);
+
+    const x = Math.random() * 120 - 60;
+    const y = Math.random() * 80 - 40;
+
+    btn.style.transform = `translate(${x}px, ${y}px)`;
+
+    setTimeout(() => {
+      setisSad(false);
+    }, 400);
+  };
 
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const text = isInView ? "Hello, Vanchika!" : "";
-  const text2 = isInView ? "Will you be my valentine?":""
-  return (
-    <>
-      <div className='bg-[#F8C8DC] w-full h-screen flex flex-col items-center justify-center gap-4'>
-        <div className='flex flex-row'>
-          <h1 className='text-4xl text-[#4A2C2A]' ref={ref}>
-            {
-              text.split("").map((char, index) => (
-                <motion.span
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {char}
-                </motion.span>
-              ))
-            }
-          </h1>
-          <motion.img
-          src={img}
-            alt="love"
-            className='w-12 h-12'
-            initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: text.length * 0.1 + 2, duration: 1 }}
-      />
-       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {hearts.map((_, i) => {
-        const startX = Math.random() * 90 + 5; // 5% → 95%
 
-        return (
+  const text = isInView ? "Hello, Vanchika!" : "";
+  const text2 = isInView ? "Will you be my valentine?" : "";
+
+  return (
+    <div className="relative bg-[#F8C8DC] min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
+
+      {/* ❤️ Floating Hearts */}
+      <div className="absolute inset-0 pointer-events-none">
+        {hearts.map((_, i) => (
           <motion.span
             key={i}
             className="absolute"
             style={{
-              left: `${startX}%`,
+              left: `${Math.random() * 90 + 5}%`,
               fontSize: `${14 + Math.random() * 20}px`,
               color: "#E63973",
             }}
-            initial={{
-              opacity: 0,
-              y: "100%",
-            }}
+            initial={{ opacity: 0, y: "100%" }}
             animate={{
               opacity: [0, 1, 1, 0],
               y: "-10%",
-              x: `${Math.random() * 30 - 15}px`, // small sideways drift
+              x: `${Math.random() * 30 - 15}px`,
             }}
             transition={{
               duration: 6 + Math.random() * 4,
@@ -90,85 +66,116 @@ const dodge = () => {
           >
             ❤️
           </motion.span>
-        );
-      })}
-    </div>
+        ))}
+      </div>
 
-        </div>
-        <div className='bg-white w-96 h-96 rounded-full flex items-center justify-center'>
-          <div className='flex flex-col items-center justify-center gap-4'>
-            <h2 className='text-2xl text-[#4A2C2A]'>
-              {text2.split('').map((letter, index) => (
-        <motion.span
-          key={index}
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.2, delay: index * 0.1 }}
+      {/* 👋 Heading */}
+      <div className="flex items-center gap-2 mb-6 z-10">
+        <h1
+          ref={ref}
+          className="
+            text-xl
+            xs:text-2xl
+            sm:text-3xl
+            md:text-4xl
+            font-semibold
+            text-[#4A2C2A]
+            text-center
+            leading-tight
+          "
         >
-          {letter}
-        </motion.span>
-      ))}
-            </h2>
-            <motion.img
-          src={!issad ? sanjihappy : sanjisad}
-            alt="love"
-            className='w-24 h-24'
-            initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: text.length * 0.1 + 2, duration: 1 }}
-      />
-      <div className="mt-6 grid grid-cols-2 gap-8 w-full max-w-sm relative">
-  
-  {/* YES SLOT */}
-  <div className="flex justify-center">
-    <motion.button
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      className="bg-[#E63973] text-white px-6 py-2 rounded-full text-lg shadow-md"
-      onClick={()=>{
-        (setaccepted(true))
-        navigate("/home?accepted=yes")
-      }}
-    >
-      YES 💕
-    </motion.button>
-  </div>
+          {text.split("").map((char, index) => (
+            <motion.span
+              key={index}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.06 }}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </h1>
 
-  {/* NO SLOT */}
-  <div className="flex justify-center relative h-12">
-    <motion.button
-  ref={noBtnRef}
-  className="bg-gray-300 text-black px-6 py-2 rounded-full text-lg absolute select-none"
-  
-  // 🖱 Desktop
-  onMouseMove={() => dodge()}
-  onMouseEnter={() => dodge()}
+        <motion.img
+          src={img}
+          alt="love"
+          className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: text.length * 0.06 + 0.4 }}
+        />
+      </div>
 
-  // 📱 Mobile
-  onTouchStart={(e) => {
-    e.preventDefault();
-    dodge();
-  }}
-  onTouchMove={(e) => {
-    e.preventDefault();
-    dodge();
-  }}
->
-  NO 💔 
-</motion.button>
+      {/* 💌 Card */}
+      <div className="bg-white w-full max-w-xs sm:max-w-md aspect-square rounded-full flex items-center justify-center shadow-lg z-10">
+        <div className="flex flex-col items-center gap-4 px-4">
 
+          <h2
+            className="
+              text-base
+              xs:text-lg
+              sm:text-xl
+              md:text-2xl
+              text-[#4A2C2A]
+              text-center
+              leading-snug
+              px-2
+            "
+          >
+            {text2.split("").map((letter, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ delay: index * 0.05 }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </h2>
 
-  </div>
+          <motion.img
+            src={issad ? sanjisad : sanjihappy}
+            alt="sanji"
+            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24"
+            animate={{ scale: issad ? 0.9 : 1 }}
+            transition={{ duration: 0.3 }}
+          />
 
-</div>
+          {/* 🔘 Buttons */}
+          <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full justify-center items-center relative min-h-[60px]">
 
+            {/* YES */}
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-[#E63973] text-white px-6 py-2 rounded-full text-lg shadow-md"
+              onClick={() => navigate("/home?accepted=yes")}
+            >
+              YES 💕
+            </motion.button>
+
+            {/* NO */}
+            <motion.button
+              ref={noBtnRef}
+              className={`bg-gray-300 text-black px-6 py-2 rounded-full text-lg select-none
+                ${isMobile ? "static" : "absolute"}`}
+              style={!isMobile ? { left: "50%", transform: "translateX(80px)" } : {}}
+              onMouseEnter={!isMobile ? dodge : undefined}
+              onMouseMove={!isMobile ? dodge : undefined}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                dodge();
+              }}
+            >
+              NO 💔
+            </motion.button>
 
           </div>
         </div>
-        
       </div>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
