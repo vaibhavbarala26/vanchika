@@ -143,35 +143,36 @@ function App() {
           />
 
           {/* 🔘 Buttons */}
-          <div className="mt-4 flex flex-col sm:flex-row gap-4 w-full justify-center items-center relative min-h-[60px]">
+          <div className="mt-6 flex justify-center w-full">
+  <div className="relative flex items-center gap-3  px-4 py-2 rounded-full">
 
-            {/* YES */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-[#E63973] text-white px-6 py-2 rounded-full text-lg shadow-md"
-              onClick={() => navigate("/home?accepted=yes")}
-            >
-              YES 💕
-            </motion.button>
+    {/* YES */}
+    <motion.button
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-[#E63973] text-white px-6 py-2 rounded-full text-lg shadow-md z-10"
+      onClick={() => navigate("/home?accepted=yes")}
+    >
+      YES 💕
+    </motion.button>
 
-            {/* NO */}
-            <motion.button
-              ref={noBtnRef}
-              className={`bg-gray-300 text-black px-6 py-2 rounded-full text-lg select-none
-                ${isMobile ? "static" : "absolute"}`}
-              style={!isMobile ? { left: "50%", transform: "translateX(80px)" } : {}}
-              onMouseEnter={!isMobile ? dodge : undefined}
-              onMouseMove={!isMobile ? dodge : undefined}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                dodge();
-              }}
-            >
-              NO 💔
-            </motion.button>
+    {/* NO */}
+    <motion.button
+      ref={noBtnRef}
+      className="bg-gray-300 text-black px-6 py-2 rounded-full text-lg select-none z-10"
+      onMouseEnter={!isMobile ? dodge : undefined}
+      onMouseMove={!isMobile ? dodge : undefined}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        dodge();
+      }}
+    >
+      NO 💔
+    </motion.button>
 
-          </div>
+  </div>
+</div>
+
         </div>
       </div>
     </div>
